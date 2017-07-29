@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.ebillson.nytimessearch.Article;
 import com.ebillson.nytimessearch.R;
@@ -17,6 +18,11 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+// Get access to the custom title view
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
 
         Article article = (Article) getIntent().getSerializableExtra("article");
 

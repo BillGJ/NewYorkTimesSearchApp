@@ -2,7 +2,9 @@ package com.ebillson.nytimessearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -12,10 +14,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.ebillson.nytimessearch.Article;
 import com.ebillson.nytimessearch.ArticleArrayAdapter;
+import com.ebillson.nytimessearch.EndlessScrollListener;
 import com.ebillson.nytimessearch.R;
+import com.ebillson.nytimessearch.SearchSettings;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -38,26 +43,51 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
 
+    SearchSettings settings;
+
+    String searchQuery;
+    int searchPage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+// Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+// Get access to the custom title view
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //references for the views
+        setupSearchParameters();
         setupViews();
     }
 
 
+
+
+
+    public void setupSearchParameters() {
+        // initialize settings with default values
+        settings = new SearchSettings();
+    }
+
     public void setupViews(){
 
-        etQuery = (EditText) findViewById(R.id.etQuery);
+       // etQuery = (EditText) findViewById(R.id.etQuery);
         gvResults = (GridView)findViewById(R.id.gvResults);
-        btnSearch = (Button)findViewById(R.id.btnSearch);
+       // btnSearch = (Button)findViewById(R.id.btnSearch);
 
-        articles = new ArrayList<>();
+        articles = new ArrayList<Article>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
+        searchPage = 0;
+
 
 
         //hook up listener for grid click
@@ -85,6 +115,25 @@ public class SearchActivity extends AppCompatActivity {
         });
 
 
+
+
+        // Attach the listener to the AdapterView onCreate
+
+
+        gvResults.setOnScrollListener(new EndlessScrollListener(5, 0) {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+
+                searchPage = page;
+                searchArticles(false);
+                //Toast.makeText(SearchActivity.this, "LoadMore "+searchPage+" - "+totalItemsCount, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
+
     }
 
 
@@ -92,7 +141,25 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
+
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+               searchQuery = query;
+               searchArticles(true);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -103,8 +170,13 @@ public class SearchActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        if (id == R.id.action_filter){
+
+            showSettings();
+
+            return  true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -112,12 +184,12 @@ public class SearchActivity extends AppCompatActivity {
 
 
     //This gets the text typed in the EditText
-    public void onArticleSearch(View view) {
+    //public void onArticleSearch(View view) {
 
+    public void searchArticles(final Boolean clear) {
+        //String query = etQuery.getText().toString();
 
-        String query = etQuery.getText().toString();
-
-        adapter.clear();
+        //adapter.clear();
 
         //Toast.makeText(this, "Searching for " + query, Toast.LENGTH_LONG).show();
 
@@ -130,8 +202,26 @@ public class SearchActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("api-key", "fbdad548ee694e36a5eebf8d30986158");
-        params.put("page", 0);
-        params.put("q",query);
+        params.put("page", searchPage);
+        params.put("q",searchQuery);
+
+
+
+        // if settings begin date has been set apply begin_date
+        if(settings.getBeginDate() != null && settings.getBeginDate().getCalendar() != null) {
+            params.put("begin_date", settings.formatBeginDate());
+        }
+
+        // if settings has sort oder apply sort
+        if(settings.getSortOrder() != SearchSettings.Sort.none) {
+            params.put("sort", settings.getSortOrder().name());
+        }
+
+        // if settings filters contains at least one filter, apply filter
+        if(settings.getFilters().size() > 0) {
+            params.put("fq", settings.generateNewsDeskFiltersOR());
+        }
+
 
         client.get(url, params, new JsonHttpResponseHandler() {
 
@@ -159,4 +249,43 @@ public class SearchActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////////
+
+
+    public void showSettings() {
+        Intent i = new Intent(this, SettingsActivity.class);
+        i.putExtra("settings", settings);
+        startActivityForResult(i, 100);
+    }
+
+    // Handle the result once the activity returns a result
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 100) {
+            if(resultCode == RESULT_OK) {
+                settings = (SearchSettings) data.getSerializableExtra("settings");
+                //Toast.makeText(this, "sort passed: "+ settings.getSortOrder(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+
 }

@@ -4,4 +4,17 @@
     <string name="hint">Enter search query</string>
     <string name="search">Search</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="date_choice">Format :YYYY/MM/DD</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="none">None</string>
+    <string name="arts">Arts</string>
+    <string name="fashionAndStyle"><![CDATA[Fashion & Style]]></string>
+    <string name="sports">Sports</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="filter_news_desk">News Desk Values</string>
+
 </resources>

@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static com.ebillson.nytimessearch.R.id.ivImage;
+
 /**
  * Created by Ebillson GJ on 7/27/2017.
  */
@@ -41,7 +43,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article>  {
             convertView = inflater.inflate(R.layout.item_article_result, parent, false);
         }
         // find the imageview
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.ivImage);
+        ImageView imageView = (ImageView)convertView.findViewById(ivImage);
         //clear out recycled image from convert view from last time
         imageView.setImageResource(0);
 
@@ -60,7 +62,9 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article>  {
 
 
            // Picasso.with(getContext()).load(thumbnail).into(imageView);
-            Picasso.with(getContext()).load(thumbnail).into(imageView);
+         //   Picasso.with(getContext()).load(thumbnail).into(imageView);
+            Picasso.with(getContext()).load(thumbnail).resize(250,250).centerCrop()
+                    .into(imageView);
         }
 
 

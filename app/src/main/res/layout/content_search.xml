@@ -12,33 +12,10 @@
     tools:context="com.ebillson.nytimessearch.activities.SearchActivity"
     tools:showIn="@layout/activity_search">
 
-    <EditText
-        android:id="@+id/etQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/btnSearch"
-        android:layout_toStartOf="@+id/btnSearch"
-        android:hint="@string/hint"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/search"
-        android:onClick="onArticleSearch"/>
-
     <GridView
         android:id="@+id/gvResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnSearch"
         android:layout_centerHorizontal="true"
-        android:numColumns="2" />
+        android:numColumns="4" />
 </RelativeLayout>

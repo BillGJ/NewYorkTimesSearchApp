@@ -71,9 +71,9 @@ public class SearchActivity extends AppCompatActivity {
         setupViews();
 
         //verifying if there is network
-       // isNetworkAvailable();
+        isNetworkAvailable();
         //verifying if device is online
-       // isOnline();
+        isOnline();
     }
 
 

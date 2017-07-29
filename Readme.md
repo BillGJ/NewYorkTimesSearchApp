@@ -22,7 +22,7 @@ The following **optional** features are implemented:
 
 * [x] Implements robust error handling, [check if internet is available](http://guides.codepath.com/android/Sending-and-Managing-Network-Requests#checking-for-network-connectivity), handle error cases, network failures
 * [x] Used the **ActionBar SearchView** or custom layout as the query box instead of an EditText
-* [ ] User can **share an article link** to their friends or email it to themselves
+* [x] User can **share an article link** to their friends or email it to themselves
 * [ ] Replaced Filter Settings Activity with a lightweight modal overlay
 
 The following **bonus** features are implemented:

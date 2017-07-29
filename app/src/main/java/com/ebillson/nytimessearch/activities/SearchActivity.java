@@ -1,6 +1,9 @@
 package com.ebillson.nytimessearch.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -29,15 +30,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
 
-    EditText etQuery;
+    //EditText etQuery;
     GridView gvResults;
-    Button btnSearch;
+    //Button btnSearch;
 
 
     ArrayList<Article> articles;
@@ -64,8 +66,14 @@ public class SearchActivity extends AppCompatActivity {
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //references for the views
+
         setupSearchParameters();
         setupViews();
+
+        //verifying if there is network
+       // isNetworkAvailable();
+        //verifying if device is online
+       // isOnline();
     }
 
 
@@ -115,10 +123,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
 
-
-
         // Attach the listener to the AdapterView onCreate
-
 
         gvResults.setOnScrollListener(new EndlessScrollListener(5, 0) {
             @Override
@@ -133,9 +138,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,13 +202,10 @@ public class SearchActivity extends AppCompatActivity {
 
         String url =  "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
-
         RequestParams params = new RequestParams();
         params.put("api-key", "fbdad548ee694e36a5eebf8d30986158");
         params.put("page", searchPage);
         params.put("q",searchQuery);
-
-
 
         // if settings begin date has been set apply begin_date
         if(settings.getBeginDate() != null && settings.getBeginDate().getCalendar() != null) {
@@ -222,19 +222,15 @@ public class SearchActivity extends AppCompatActivity {
             params.put("fq", settings.generateNewsDeskFiltersOR());
         }
 
-
         client.get(url, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                ///////////
-
                 JSONArray articleJSONResults = null;
 
                 try{
-
                     articleJSONResults = response.getJSONObject("response").getJSONArray("docs");
-
                     //////////
                     adapter.addAll(Article.fromJSONArray(articleJSONResults));
                     adapter.notifyDataSetChanged();
@@ -242,30 +238,10 @@ public class SearchActivity extends AppCompatActivity {
 
                 }catch (JSONException e){
                     e.printStackTrace();
-
                 }
-
             }
         });
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     ////////////////////////////////
 
@@ -286,6 +262,22 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
 
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
+    }
 
 }

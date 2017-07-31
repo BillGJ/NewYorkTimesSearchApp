@@ -17,11 +17,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.ebillson.nytimessearch.models.Article;
-import com.ebillson.nytimessearch.adapters.ArticleArrayAdapter;
-import com.ebillson.nytimessearch.utils.EndlessScrollListener;
 import com.ebillson.nytimessearch.R;
+import com.ebillson.nytimessearch.adapters.ArticleArrayAdapter;
+import com.ebillson.nytimessearch.models.Article;
 import com.ebillson.nytimessearch.models.SearchSettings;
+import com.ebillson.nytimessearch.utils.EndlessScrollListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -57,15 +57,17 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-
-// Remove default title text
+        // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         //references for the views
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+
 
         setupSearchParameters();
         setupViews();

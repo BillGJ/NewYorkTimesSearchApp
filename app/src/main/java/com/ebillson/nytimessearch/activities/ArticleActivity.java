@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.ebillson.nytimessearch.Article;
+import com.ebillson.nytimessearch.models.Article;
 import com.ebillson.nytimessearch.R;
 
 public class ArticleActivity extends AppCompatActivity {

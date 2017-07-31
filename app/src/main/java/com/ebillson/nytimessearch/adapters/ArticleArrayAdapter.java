@@ -1,4 +1,4 @@
-package com.ebillson.nytimessearch;
+package com.ebillson.nytimessearch.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ebillson.nytimessearch.models.Article;
+import com.ebillson.nytimessearch.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

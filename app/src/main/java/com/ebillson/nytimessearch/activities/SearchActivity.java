@@ -17,11 +17,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.ebillson.nytimessearch.Article;
-import com.ebillson.nytimessearch.ArticleArrayAdapter;
-import com.ebillson.nytimessearch.EndlessScrollListener;
+import com.ebillson.nytimessearch.models.Article;
+import com.ebillson.nytimessearch.adapters.ArticleArrayAdapter;
+import com.ebillson.nytimessearch.utils.EndlessScrollListener;
 import com.ebillson.nytimessearch.R;
-import com.ebillson.nytimessearch.SearchSettings;
+import com.ebillson.nytimessearch.models.SearchSettings;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;

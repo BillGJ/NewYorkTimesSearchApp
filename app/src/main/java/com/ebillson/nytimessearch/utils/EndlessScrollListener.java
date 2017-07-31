@@ -1,4 +1,4 @@
-package com.ebillson.nytimessearch;
+package com.ebillson.nytimessearch.utils;
 
 import android.widget.AbsListView;
 

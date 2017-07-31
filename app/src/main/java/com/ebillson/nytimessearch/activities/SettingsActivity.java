@@ -12,7 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.ebillson.nytimessearch.R;
-import com.ebillson.nytimessearch.SearchSettings;
+import com.ebillson.nytimessearch.models.SearchSettings;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

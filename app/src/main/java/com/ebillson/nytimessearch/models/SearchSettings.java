@@ -1,4 +1,4 @@
-package com.ebillson.nytimessearch;
+package com.ebillson.nytimessearch.models;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -73,6 +73,8 @@ public class SearchSettings implements Serializable {
 
     // return a String of formatted Date yyyy-MM-dd for
     public String formatBeginDate() {
+
+
         return beginDate.format(beginDate.getCalendar().getTime());
     }
 

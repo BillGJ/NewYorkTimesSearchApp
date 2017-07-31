@@ -46,7 +46,15 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
+
+
 <img src='http://i.imgur.com/zqaxV0o.gif' title='New York Times Search App Video Walkthrough' width='' alt='Android Development' />
+
+<br/>
+<br/>
+<br/>
+
+<img src='http://i.imgur.com/D9z5Cbr.gif' title='New York Times Search App Video Walkthrough' width='' alt='Android Development' />
 
 
 
